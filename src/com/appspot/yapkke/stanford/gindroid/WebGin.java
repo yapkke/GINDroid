@@ -10,6 +10,10 @@ import java.io.IOException;
 
 import android.util.Log;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.*;
+import org.jsoup.select.*;
+
 /** Class that interacts with gin.stanford.edu
  *
  * Done through HTTP client
@@ -42,16 +46,22 @@ public class WebGin
      */
     public void auth()
     {
+	//Get form for authentication
 	HttpGet request = new HttpGet("https://gin.stanford.edu");
 	ResponseHandler<String> responseHandler = new BasicResponseHandler();
+	String response;
 	try
 	{
-	    String response = httpClient.execute(request, responseHandler);
-	    
-	    Log.d(name, response);
+	    response = httpClient.execute(request, responseHandler);   
 	} catch (IOException e)
 	{
+	    response = "";
 	    Log.d(name, "Error:"+e.toString());
 	}
+
+	//Parse for form
+	Document doc = Jsoup.parse(response);
+	Log.d(name, doc.body().getElementsByTag("form").html());
+	
     }
 }
