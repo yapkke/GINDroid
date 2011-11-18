@@ -17,6 +17,6 @@ public class GINDroid extends Activity
         setContentView(R.layout.main);
 
 	wg = new WebGin();
-	wg.auth();
+	wg.auth("usename", "password");
     }
 }
