@@ -16,6 +16,13 @@ public class Settings
     extends Activity
     implements OnClickListener
 {
+    /** Reference to EditText with username
+     */
+    EditText userEditText;
+    /** Reference to EditText with password
+     */
+    EditText passwordEditText;
+
     /** Starting setting activity for recording/changing settings.
      */
     @Override
@@ -24,11 +31,19 @@ public class Settings
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings);
 
+	//Get reference to edit text
+	userEditText = (EditText) findViewById(R.id.usernameentry);
+	passwordEditText = (EditText) findViewById(R.id.passwordentry);
+
 	//Set listeners
 	Button okButton = (Button) findViewById(R.id.setting_ok);
 	okButton.setOnClickListener(this);	
 
 	//Populate saved content if any
+	SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
+	userEditText.setText(settings.getString("username", ""));
+	passwordEditText.setText(settings.getString("password", ""));	
+	
 
     }
 
@@ -39,7 +54,11 @@ public class Settings
     public void onClick(View v) 
     {
 	//Save settings
-	
+	SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
+	SharedPreferences.Editor editor = settings.edit();
+	editor.putString("username", userEditText.getText().toString());
+	editor.putString("password", passwordEditText.getText().toString());
+	editor.commit();
 
 	//Move back to main view
 	Intent mainIntent = new Intent(this, GINDroid.class);
