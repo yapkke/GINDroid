@@ -37,6 +37,8 @@ public class WebGin
     HttpClient httpClient;
     
     /** Constructor
+     *
+     * Create new HTTP client that handles cookies.
      */
     public WebGin()
     {
@@ -52,6 +54,9 @@ public class WebGin
     }
 
     /** Authentication
+     *
+     * @param username username i.e., CS id
+     * @param password password for username
      */
     public void auth(String username, String password)
     {
@@ -79,7 +84,6 @@ public class WebGin
 		    if (n.compareTo("password") == 0)
 			v = password;
 		    nameValList.add(new BasicNameValuePair(n, v));
-		    Log.d(name,n+"="+v);
 		}
 	    }
 	}
@@ -96,10 +100,12 @@ public class WebGin
 	    postResponse = "";
 	    Log.d(name, "Error:"+e.toString());
 	}
-	Log.d(name, postResponse);
     }
 
-    /** 
+    /** Send HTTP request (get or post)
+     *
+     * @param request request to be sent
+     * @return response as a string
      */
     public String httpRequest(HttpUriRequest request)
     {
