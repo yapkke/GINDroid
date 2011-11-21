@@ -59,8 +59,7 @@ public class Settings
 	editor.putString("password", passwordEditText.getText().toString());
 	editor.commit();
 
-	Toast toast=Toast.makeText(this, "Settings saved", 2000);
-	toast.show();
+	Toast.makeText(this, "Settings saved", Toast.LENGTH_SHORT).show();
 
 	//Move back to main view
 	Intent mainIntent = new Intent(this, GINDroid.class);

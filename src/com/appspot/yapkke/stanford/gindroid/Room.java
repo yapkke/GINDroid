@@ -9,7 +9,7 @@ import android.os.Bundle;
  * @date Nov 2011
  */
 public class Room
-    extends Activity
+    extends GDActivity
 {
     /** Starting activity for room today
      */

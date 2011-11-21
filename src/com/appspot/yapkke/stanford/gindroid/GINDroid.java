@@ -5,7 +5,6 @@ import android.view.*;
 import android.widget.*;
 import android.content.*;
 import android.content.res.*;
-import android.preference.*;
 import android.os.Bundle;
 
 /** GINDroid main activity
@@ -14,11 +13,7 @@ import android.os.Bundle;
  * @date Nov 2011
  */
 public class GINDroid extends TabActivity
-{
-    /** WebGin instance
-     */
-    WebGin wg;
-    
+{    
     /** Starting GINDroid activity
      */
     @Override
@@ -26,12 +21,6 @@ public class GINDroid extends TabActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-
-	//Create new WebGin
-	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-	wg = new WebGin();
-	wg.auth(settings.getString("username", ""),
-		settings.getString("password", ""));
 
 	//Create tabs
 	Resources res = getResources();

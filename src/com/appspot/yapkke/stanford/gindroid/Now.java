@@ -9,7 +9,7 @@ import android.os.Bundle;
  * @date Nov 2011
  */
 public class Now
-    extends Activity
+    extends GDActivity
 {
     /** Starting now activity for showing the current room occupancy
      */
@@ -18,5 +18,8 @@ public class Now
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.now);
+
+	
+
     }
 }
