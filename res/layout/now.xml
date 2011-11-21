@@ -8,8 +8,8 @@
       android:gravity="center_horizontal"
       android:textStyle="bold"
       android:typeface="serif"
-      android:layout_width="100px"
-      android:layout_height="50px"/>
+      android:layout_width="100dp"
+      android:layout_height="40dp"/>
   <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 		android:orientation="vertical"
 		android:layout_width="fill_parent"
@@ -17,10 +17,10 @@
     <TextView
 	android:id="@+id/now_current"
 	android:layout_width="fill_parent"
-	android:layout_height="wrap_content"/>
+	android:layout_height="20dp"/>
     <TextView
 	android:id="@+id/now_next"
 	android:layout_width="fill_parent"
-	android:layout_height="wrap_content"/>
+	android:layout_height="20dp"/>
   </LinearLayout>
 </LinearLayout>

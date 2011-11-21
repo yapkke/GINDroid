@@ -4,6 +4,7 @@ import android.app.*;
 import android.widget.*;
 import android.content.*;
 import android.view.*;
+import android.graphics.*;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -51,8 +52,20 @@ public class Now
 	    TextView tvCurrent = (TextView) row.findViewById(R.id.now_current);
 	    TextView tvNext = (TextView) row.findViewById(R.id.now_next);
 	    tvClass.setText(cNEvent.classroom);
-	    tvCurrent.setText("Testing");
-	    tvNext.setText("Testing");
+	    if (cNEvent.currEvent == null)
+	    {
+		tvCurrent.setText("Free");
+		tvClass.setTextColor(Color.parseColor("#00ff00"));
+	    }
+	    else
+	    {
+		tvCurrent.setText(cNEvent.currEvent.timeTitle());
+		tvClass.setTextColor(Color.parseColor("#ff0000"));		
+	    }
+	    if (cNEvent.nextEvent == null)
+		tvNext.setText("Free thereafter");
+	    else
+		tvNext.setText(cNEvent.nextEvent.timeTitle());
 	    
 	    return row;
 	}

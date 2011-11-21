@@ -74,6 +74,19 @@ public class WebGin
 	    s += "URL:"+url;
 	    return s;
 	}
+
+	public String time24Hr(Integer i)
+	{
+	    String is = i.toString().trim();
+	    while (is.length() < 4)
+		is = "0"+is;
+	    return is;
+	}
+
+	public String timeTitle()
+	{
+	    return time24Hr(start)+"-"+time24Hr(end)+":"+title;
+	}
     }
 
     class Listing
