@@ -47,8 +47,12 @@ public class Now
 	    }
  
 	    CurrNextEvent cNEvent = (CurrNextEvent) getItem(position);
-	    TextView tv = (TextView) row.findViewById(R.id.text1);
-	    tv.setText(cNEvent.classroom);
+	    TextView tvClass = (TextView) row.findViewById(R.id.now_classroom);
+	    TextView tvCurrent = (TextView) row.findViewById(R.id.now_current);
+	    TextView tvNext = (TextView) row.findViewById(R.id.now_next);
+	    tvClass.setText(cNEvent.classroom);
+	    tvCurrent.setText("Testing");
+	    tvNext.setText("Testing");
 	    
 	    return row;
 	}

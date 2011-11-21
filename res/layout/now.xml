@@ -1,8 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/text1"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:padding="10dp"
-    android:textSize="16sp" >
-</TextView>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	      android:orientation="horizontal"
+	      android:layout_width="fill_parent"
+	      android:layout_height="fill_parent">
+  <TextView
+      android:id="@+id/now_classroom"
+      android:gravity="center_horizontal"
+      android:textStyle="bold"
+      android:typeface="serif"
+      android:layout_width="100px"
+      android:layout_height="50px"/>
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:orientation="vertical"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent">
+    <TextView
+	android:id="@+id/now_current"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"/>
+    <TextView
+	android:id="@+id/now_next"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"/>
+  </LinearLayout>
+</LinearLayout>
