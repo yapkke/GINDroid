@@ -17,7 +17,7 @@ import java.util.*;
  * @date Nov 2011
  */
 public class Now
-    extends GDListActivity
+    extends GDActivity
 {    
     public class EventAdapter<T>
 	extends ArrayAdapter<T>
@@ -73,13 +73,12 @@ public class Now
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+	setContentView(R.layout.now_main);
         
 	refresh_listing();
 
-	setListAdapter(new EventAdapter<CurrNextEvent>(this, R.layout.now, currNextEvents()));
-		       
-	ListView lv = getListView();
-	lv.setTextFilterEnabled(true);
+	ListView lv = (ListView) findViewById(R.id.now_listview);
+	lv.setAdapter(new EventAdapter<CurrNextEvent>(this, R.layout.now, currNextEvents()));
     }
 
     class CurrNextEvent
