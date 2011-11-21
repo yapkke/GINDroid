@@ -139,7 +139,6 @@ public class WebGin
 			getStartEnd(e, getFirstElement(div.getElementsByTag("nobr")).text());
 			
 			listing.events.add(e);
-			Log.d(name, e.toString());
 		    }
 		    tdIndex++;
 		}
@@ -167,7 +166,7 @@ public class WebGin
     {
 	String t = time.trim();
 	Integer timeNum = new Integer(t.substring(0,t.length()-2).replaceAll(":","").trim());
-	if (t.substring(t.length()-2).compareTo("pm") == 0)
+	if ((t.substring(t.length()-2).compareTo("pm") == 0) && (timeNum != 1200))
 	    timeNum += 1200;
 	
 	return timeNum;
