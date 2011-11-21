@@ -130,6 +130,9 @@ public class WebGin
 	}
 
 	//Get rows
+	int[] ints = new int[listing.classrooms.size()];
+	for (int i = 0; i < listing.classrooms.size(); i++)
+	    ints[i] = 0;
 	Elements trs = doc.body().getElementsByTag("tr");
 	for (Element tr : trs)
 	{
@@ -138,23 +141,50 @@ public class WebGin
 	    {
 		Elements tds = tr.getElementsByTag("td");
 		int tdIndex = 0;
+
 		for (Element td : tds)
 		{
 		    Element div = getFirstElement(td.getElementsByTag("div"));
-		    if (div != null)
+
+		    //Check if td is used for time (left column)
+		    if ((div != null) || (td.text().trim().length() == 0))
 		    {
-			Event e = new Event();
-			e.date = date;
-			e.classroom = listing.classrooms.get(tdIndex); 
-			Element a = getFirstElement(div.getElementsByTag("a"));
-			e.url = a.attr("href");
-			e.title = a.text().trim();
-			getStartEnd(e, getFirstElement(div.getElementsByTag("nobr")).text());
-			
-			listing.events.add(e);
+			//Account to ongoing event in table
+			while (ints[tdIndex] > 0)
+			{
+			    ints[tdIndex]--;
+			    tdIndex++;
+			}
+		    
+			//Get event
+			if (div != null)
+			{
+			    //Get rowspan
+			    String rsStr = td.attr("rowspan");
+			    if (rsStr.length() == 0)
+				rsStr = "1";
+			    int rs = new Integer(rsStr).intValue();
+			    ints[tdIndex] = rs-1;
+			    
+			    //Set event
+			    Event e = new Event();
+			    e.date = date;
+			    e.classroom = listing.classrooms.get(tdIndex); 
+			    Element a = getFirstElement(div.getElementsByTag("a"));
+			    e.url = a.attr("href");
+			    e.title = a.text().trim();
+			    getStartEnd(e, getFirstElement(div.getElementsByTag("nobr")).text());
+			    
+			    listing.events.add(e);
+			}
+			tdIndex++;
 		    }
-		    tdIndex++;
 		}
+	    }
+	    else
+	    {
+		for (int i = 0; i < ints.length; i++)
+		    ints[i]--;
 	    }
 	}
 
