@@ -2,6 +2,7 @@ package com.appspot.yapkke.stanford.gindroid;
 
 import android.app.*;
 import android.widget.*;
+import android.widget.AdapterView.*;
 import android.content.*;
 import android.view.*;
 import android.graphics.*;
@@ -79,6 +80,15 @@ public class Now
 
 	ListView lv = (ListView) findViewById(R.id.now_listview);
 	lv.setAdapter(new EventAdapter<CurrNextEvent>(this, R.layout.now, currNextEvents()));
+	lv.setOnItemClickListener(new OnItemClickListener() {
+		public void onItemClick(AdapterView<?> parent, View view, int position, long id) 
+		{
+		    // When clicked, show a toast with the TextView text
+		    Toast.makeText(getApplicationContext(),
+				   ((TextView) view.findViewById(R.id.now_classroom)).getText(),
+				   Toast.LENGTH_SHORT).show();
+		}
+	    });
     }
 
     class CurrNextEvent
