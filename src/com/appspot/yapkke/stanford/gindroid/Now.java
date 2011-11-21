@@ -18,11 +18,7 @@ import java.util.*;
  */
 public class Now
     extends GDListActivity
-{
-    /** Listing
-     */
-    WebGin.Listing listing;
-    
+{    
     public class EventAdapter<T>
 	extends ArrayAdapter<T>
     {
@@ -84,11 +80,6 @@ public class Now
 		       
 	ListView lv = getListView();
 	lv.setTextFilterEnabled(true);
-    }
-
-    public void refresh_listing()
-    {
-	listing = wg.briefListing();
     }
 
     class CurrNextEvent
