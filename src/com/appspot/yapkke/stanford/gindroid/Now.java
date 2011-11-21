@@ -1,6 +1,9 @@
 package com.appspot.yapkke.stanford.gindroid;
 
 import android.app.*;
+import android.widget.*;
+import android.content.*;
+import android.view.*;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -13,43 +16,96 @@ import java.util.*;
  * @date Nov 2011
  */
 public class Now
-    extends GDActivity
+    extends GDListActivity
 {
     /** Listing
      */
     WebGin.Listing listing;
     
+    public class EventAdapter<T>
+	extends ArrayAdapter<T>
+    {
+	public EventAdapter(Context context, int textViewResourceId, T[] objects) 
+	{
+            super(context, textViewResourceId, objects);
+	}
+	
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) 
+	{
+	    View row;
+	    
+	    if (null == convertView)
+	    {
+		LayoutInflater mInflater = (LayoutInflater) 
+		    getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		row = mInflater.inflate(R.layout.now, null);
+	    } 
+	    else 
+	    {
+		row = convertView;
+	    }
+ 
+	    CurrNextEvent cNEvent = (CurrNextEvent) getItem(position);
+	    TextView tv = (TextView) row.findViewById(R.id.text1);
+	    tv.setText(cNEvent.classroom);
+	    
+	    return row;
+	}
+    }
+
     /** Starting now activity for showing the current room occupancy
      */
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.now);
-
+        
 	refresh_listing();
 
-	Integer now = now();
-	for (String c : listing.classrooms)
-	{
-	    WebGin.Event e = nextEvent(c);
-	    if (e != null)
-	    {
-		if (e.start < now)
-		    Log.d("Now", c+" "+e.title);
-		else
-		    Log.d("Now", c+" free till "+e.start);
-	    }
-	    else
-	    {
-		Log.d("Now", c+" free");
-	    }
-	}
+	setListAdapter(new EventAdapter<CurrNextEvent>(this, R.layout.now, currNextEvents()));
+		       
+	ListView lv = getListView();
+	lv.setTextFilterEnabled(true);
     }
 
     public void refresh_listing()
     {
 	listing = wg.briefListing();
+    }
+
+    class CurrNextEvent
+    {
+	public String classroom;
+	public WebGin.Event currEvent = null;
+	public WebGin.Event nextEvent = null;
+
+	public String toString()
+	{
+	    if (currEvent != null)
+		return currEvent.toString();
+	    else
+		return nextEvent.toString();
+	}
+    }
+
+    /** Get current and next event
+     */
+    public CurrNextEvent[] currNextEvents()
+    {
+	CurrNextEvent cNEvent[] = new CurrNextEvent[listing.classrooms.size()];
+	int cIndex = 0;
+	for (String c : listing.classrooms)
+	{
+	    cNEvent[cIndex] = new CurrNextEvent();
+	    cNEvent[cIndex].classroom = c;
+	    cNEvent[cIndex].currEvent = currEvent(c);
+	    cNEvent[cIndex].nextEvent = nextEvent(c);
+
+	    cIndex++;
+	}
+
+	return cNEvent;
     }
 
     public WebGin.Event nextEvent(String classroom)
@@ -60,12 +116,27 @@ public class Now
 	for (WebGin.Event e : listing.events)
 	    if (e.classroom.compareTo(classroom) == 0)
 	    {
-		if ((e.end > now) && 
+		if ((e.start > now) && 
 		    ((nEvent == null) || (e.start < nEvent.start)))
 		    nEvent = e;
 	    }
 
 	return nEvent;
+    }
+
+    public WebGin.Event currEvent(String classroom)
+    {
+	WebGin.Event cEvent = null;
+	
+	Integer now = now();
+	for (WebGin.Event e : listing.events)
+	    if (e.classroom.compareTo(classroom) == 0)
+	    {
+		if ((e.start <= now) && (e.end >= now))
+		    cEvent = e;
+	    }
+
+	return cEvent;
     }
 
     public Integer now()
