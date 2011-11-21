@@ -53,6 +53,139 @@ public class WebGin
 	}
     }
 
+    /** Class to represent event
+     */
+    class Event
+    {
+	public String title = "";
+	public String classroom = "";
+	public String date = "";
+	public Integer start = new Integer(0);
+	public Integer end = new Integer(0);
+	public String series = "";
+	public String owner = "";
+	public String url = "";
+
+	public String toString()
+	{
+	    String s = "Title:"+title+"\n";
+	    s += "Classroom:"+classroom+"\n";
+	    s += "Duration:"+date+" "+start.toString()+"-"+end.toString()+"\n";
+	    s += "URL:"+url;
+	    return s;
+	}
+    }
+
+    class Listing
+    {
+	Vector<Event> events = new Vector<Event>();
+	Vector<String> classrooms = new Vector<String>();
+    }
+
+    /** Get today's brief listing
+     * 
+     * Return only title, date, start and end
+     */
+    public Listing briefListing()
+    {
+	Listing listing = new Listing();
+	Log.d(name, "Get brief listing");
+
+	//Get page
+	HttpGet request = new HttpGet("https://gin.stanford.edu/showschedule.php");
+	String response = httpRequest(request);
+	Document doc = Jsoup.parse(response);
+	
+	//Get headers of table
+	String date = "";
+	Elements ths = doc.body().getElementsByTag("th");
+	for (Element th : ths)
+	{
+	    Element nobr = getFirstElement(th.getElementsByTag("nobr"));
+	    if (nobr != null)
+	    {
+		//Get date
+		date = nobr.text().trim();
+		Log.d(name, "Date:"+date);
+	    }
+
+	    Elements as = th.getElementsByTag("a");
+	    if ((nobr == null) && (as.size() > 0))
+		for (Element a : as)
+		    if (a.toString().indexOf("inspectclassroom") != -1)
+			listing.classrooms.add(a.text().trim());
+	}
+
+	//Get rows
+	Elements trs = doc.body().getElementsByTag("tr");
+	for (Element tr : trs)
+	{
+	    Elements divs = tr.getElementsByTag("div");
+	    if (divs.size() > 0)
+	    {
+		Elements tds = tr.getElementsByTag("td");
+		int tdIndex = 0;
+		for (Element td : tds)
+		{
+		    Element div = getFirstElement(td.getElementsByTag("div"));
+		    if (div != null)
+		    {
+			Event e = new Event();
+			e.date = date;
+			e.classroom = listing.classrooms.get(tdIndex); 
+			Element a = getFirstElement(div.getElementsByTag("a"));
+			e.url = a.attr("href");
+			e.title = a.text().trim();
+			getStartEnd(e, getFirstElement(div.getElementsByTag("nobr")).text());
+			
+			listing.events.add(e);
+			Log.d(name, e.toString());
+		    }
+		    tdIndex++;
+		}
+	    }
+	}
+
+	return listing;
+    }
+
+    /** Get start and end time
+     */
+    protected void getStartEnd(Event e, String time)
+    {
+	int splitIndex = time.indexOf("-");
+	if (splitIndex == -1)
+	    return;
+
+	e.start = get24Hr(time.substring(0,splitIndex));
+	e.end = get24Hr(time.substring(splitIndex+1));
+    }
+
+    /** Time string to 24 hour valie
+     */
+    protected Integer get24Hr(String time)
+    {
+	String t = time.trim();
+	Integer timeNum = new Integer(t.substring(0,t.length()-2).replaceAll(":","").trim());
+	if (t.substring(t.length()-2).compareTo("pm") == 0)
+	    timeNum += 1200;
+	
+	return timeNum;
+    }
+
+    /** Get first element by tag
+     *
+     * @param elements list of elements
+     * @return first element or null
+     */
+    public Element getFirstElement(Elements elements)
+    {
+	for (Element e : elements)
+	    return e;
+
+	return null;
+    }
+
     /** Authentication
      *
      * @param username username i.e., CS id

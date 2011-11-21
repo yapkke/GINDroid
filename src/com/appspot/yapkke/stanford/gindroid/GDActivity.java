@@ -16,7 +16,7 @@ public class GDActivity
 {
     /** WebGin instance
      */
-    WebGin wg;
+    protected WebGin wg;
 
     @Override
     public void onCreate(Bundle savedInstanceState)

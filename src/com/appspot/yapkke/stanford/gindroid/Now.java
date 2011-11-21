@@ -3,6 +3,8 @@ package com.appspot.yapkke.stanford.gindroid;
 import android.app.*;
 import android.os.Bundle;
 
+import java.util.*;
+
 /** Now activity
  *
  * @author ykk
@@ -19,7 +21,7 @@ public class Now
         super.onCreate(savedInstanceState);
         setContentView(R.layout.now);
 
+	WebGin.Listing listing = wg.briefListing();
 	
-
     }
 }
