@@ -3,6 +3,7 @@ package com.appspot.yapkke.stanford.gindroid;
 import android.app.*;
 import android.view.*;
 import android.content.*;
+import android.preference.*;
 import android.os.Bundle;
 
 /** GINDroid main activity
@@ -24,8 +25,10 @@ public class GINDroid extends TabActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-	//wg = new WebGin();
-	//wg.auth("username", "password");
+	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+	wg = new WebGin();
+	wg.auth(settings.getString("username", ""),
+		settings.getString("password", ""));
     }
 
     /** Create menu from XML

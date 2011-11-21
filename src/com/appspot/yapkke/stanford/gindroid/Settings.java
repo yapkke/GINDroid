@@ -5,6 +5,7 @@ import android.view.*;
 import android.view.View.*;
 import android.content.*;
 import android.widget.*;
+import android.preference.*;
 import android.os.Bundle;
 
 /** Settings activity
@@ -40,11 +41,9 @@ public class Settings
 	okButton.setOnClickListener(this);	
 
 	//Populate saved content if any
-	SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
+	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 	userEditText.setText(settings.getString("username", ""));
 	passwordEditText.setText(settings.getString("password", ""));	
-	
-
     }
 
     /** Deal with clicking of the OK button
@@ -54,7 +53,7 @@ public class Settings
     public void onClick(View v) 
     {
 	//Save settings
-	SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
+	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 	SharedPreferences.Editor editor = settings.edit();
 	editor.putString("username", userEditText.getText().toString());
 	editor.putString("password", passwordEditText.getText().toString());
