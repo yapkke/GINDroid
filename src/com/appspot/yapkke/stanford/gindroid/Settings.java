@@ -34,7 +34,7 @@ public class Settings
 
 	//Get reference to edit text
 	userEditText = (EditText) findViewById(R.id.usernameentry);
-	passwordEditText = (EditText) findViewById(R.id.passwordentry);
+	passwordEditText = (EditText) findViewById(R.id.password_entry);
 
 	//Set listeners
 	Button okButton = (Button) findViewById(R.id.setting_ok);

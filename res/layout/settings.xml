@@ -5,7 +5,7 @@
     android:layout_height="fill_parent"
     >
 <TextView
-    android:id="@+id/username"
+    android:id="@+id/username_view"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:text="Username:"/>
@@ -14,25 +14,25 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="@android:drawable/editbox_background"
-    android:layout_below="@id/username"/>
+    android:layout_below="@id/username_view"/>
 <TextView
-    android:id="@+id/password"
+    android:id="@+id/password_view"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:text="Password:"
     android:layout_below="@id/usernameentry"/>
 <EditText
-    android:id="@+id/passwordentry"
+    android:id="@+id/password_entry"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:password="true"
     android:background="@android:drawable/editbox_background"
-    android:layout_below="@id/password"/>
+    android:layout_below="@id/password_view"/>
 <Button
     android:id="@+id/setting_ok"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_below="@id/passwordentry"
+    android:layout_below="@id/password_entry"
     android:layout_alignParentRight="true"
     android:layout_marginLeft="10dip"
     android:text="OK" />
