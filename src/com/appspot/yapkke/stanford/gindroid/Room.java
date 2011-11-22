@@ -25,11 +25,6 @@ public class Room
         setContentView(R.layout.room_main);
 
 	refresh_listing();
-
-	//Get intent
-	String room = getIntent().getStringExtra("Room");
-	if (room != null)
-	    Log.d("Room", room);
 	
 	//Create spinner
 	Spinner spin = (Spinner) findViewById(R.id.room_spinner);
@@ -38,6 +33,13 @@ public class Room
 							classrooms());
 	adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 	spin.setAdapter(adapter);
+
+	//Set pre-set room
+	String room = getIntent().getStringExtra("Room");
+	if (room != null)
+	    for (int i = 0; i < spin.getCount(); i++)
+		if (room.compareTo((String) spin.getItemAtPosition(i)) == 0)
+		    spin.setSelection(i);
     }
 
     public String[] classrooms()
