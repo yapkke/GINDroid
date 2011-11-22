@@ -112,8 +112,15 @@ public class WebGin
 	//Get page
 	HttpGet request = new HttpGet("https://gin.stanford.edu/showschedule.php");
 	String response = httpRequest(request);
+	if (response == null)
+	    return listing;
 	Document doc = Jsoup.parse(response);
-	
+
+	//Check authentication OK
+	Elements forms = doc.body().getElementsByTag("form");
+	if (forms.size() != 0)
+	    return listing;
+
 	//Get headers of table
 	String date = "";
 	Elements ths = doc.body().getElementsByTag("th");
@@ -285,18 +292,17 @@ public class WebGin
     /** Send HTTP request (get or post)
      *
      * @param request request to be sent
-     * @return response as a string
+     * @return response as a string or null if in error
      */
     public String httpRequest(HttpUriRequest request)
     {
 	ResponseHandler<String> responseHandler = new BasicResponseHandler();
-	String response;
+	String response = null;
 	try
 	{
 	    response = httpClient.execute(request, responseHandler);   
 	} catch (IOException e)
 	{
-	    response = "";
 	    Log.d(name, "Error:"+e.toString());
 	}
 

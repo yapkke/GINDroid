@@ -37,6 +37,9 @@ public class GDActivity
     public void refresh_listing()
     {
 	listing = wg.briefListing();
-	Toast.makeText(this, "Fetch GIN data", Toast.LENGTH_SHORT).show();
+	if (listing.classrooms.size() == 0)
+	    Toast.makeText(this, "GIN access failed!", Toast.LENGTH_LONG).show();
+	else
+	    Toast.makeText(this, "Fetch GIN data", Toast.LENGTH_SHORT).show();
     }
 }
