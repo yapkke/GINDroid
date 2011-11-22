@@ -85,7 +85,12 @@ public class WebGin
 
 	public String timeTitle()
 	{
-	    return time24Hr(start)+"-"+time24Hr(end)+":"+title;
+	    return time()+":"+title;
+	}
+
+	public String time()
+	{
+	    return time24Hr(start)+"-"+time24Hr(end);
 	}
     }
 
@@ -209,7 +214,7 @@ public class WebGin
     {
 	String t = time.trim();
 	Integer timeNum = new Integer(t.substring(0,t.length()-2).replaceAll(":","").trim());
-	if ((t.substring(t.length()-2).compareTo("pm") == 0) && (timeNum != 1200))
+	if ((t.substring(t.length()-2).compareTo("pm") == 0) && (timeNum < 1200))
 	    timeNum += 1200;
 	
 	return timeNum;
