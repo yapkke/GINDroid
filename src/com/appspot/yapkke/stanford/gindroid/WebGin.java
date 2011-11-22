@@ -113,13 +113,19 @@ public class WebGin
 	HttpGet request = new HttpGet("https://gin.stanford.edu/showschedule.php");
 	String response = httpRequest(request);
 	if (response == null)
+	 {
+	     Log.d(name, "Null response");
 	    return listing;
+	 }
 	Document doc = Jsoup.parse(response);
-
+	
 	//Check authentication OK
-	Elements forms = doc.body().getElementsByTag("form");
-	if (forms.size() != 0)
+	Element title = getFirstElement(doc.body().getElementsByTag("title"));
+	if ((title != null) && (title.text().compareTo("Webauth Login") == 0))
+	{
+	    Log.d(name, response);
 	    return listing;
+	}
 
 	//Get headers of table
 	String date = "";
