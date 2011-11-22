@@ -3,10 +3,13 @@ package com.appspot.yapkke.stanford.gindroid;
 import android.app.*;
 import android.widget.*;
 import android.content.*;
+import android.view.*;
 import android.R.layout.*;
 import android.os.Bundle;
 
 import android.util.Log;
+
+import java.util.*;
 
 /** Room activity
  *
@@ -16,6 +19,40 @@ import android.util.Log;
 public class Room
     extends GDActivity
 {
+    public class EventAdapter<T>
+	extends ArrayAdapter<T>
+    {
+	public EventAdapter(Context context, int textViewResourceId, T[] objects) 
+	{
+            super(context, textViewResourceId, objects);
+	}
+	
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) 
+	{
+	    View row;
+	    
+	    if (null == convertView)
+	    {
+		LayoutInflater mInflater = (LayoutInflater) 
+		    getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		row = mInflater.inflate(R.layout.room, null);
+	    } 
+	    else 
+	    {
+		row = convertView;
+	    }
+ 
+	    WebGin.Event e = (WebGin.Event) getItem(position);
+	    TextView tvTime = (TextView) row.findViewById(R.id.room_time);
+	    TextView tvTitle = (TextView) row.findViewById(R.id.room_title);
+	    tvTitle.setText(e.title);
+	    tvTime.setText(e.time());
+	    
+	    return row;
+	}
+    }
+
     /** Starting activity for room today
      */
     @Override
@@ -40,6 +77,11 @@ public class Room
 	    for (int i = 0; i < spin.getCount(); i++)
 		if (room.compareTo((String) spin.getItemAtPosition(i)) == 0)
 		    spin.setSelection(i);
+
+	//Set list view
+	ListView lv = (ListView) findViewById(R.id.room_listview);
+	lv.setAdapter(new EventAdapter<WebGin.Event>(this, R.layout.room,
+						     roomEvents((String) spin.getSelectedItem())));
     }
 
     public String[] classrooms()
@@ -54,4 +96,19 @@ public class Room
 
 	return cs;
     }
+
+    public WebGin.Event[] roomEvents(String room)
+    {
+	Vector<WebGin.Event> es = new Vector<WebGin.Event>();
+	for (WebGin.Event e : listing.events)
+	    if (e.classroom.compareTo(room) == 0)
+		es.add(e);   
+
+	WebGin.Event[] events = new WebGin.Event[es.size()];
+	for (int i = 0; i < es.size(); i++)
+	    events[i] = (WebGin.Event) es.get(i);;
+
+	return events;
+    }    
+
 }

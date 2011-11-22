@@ -48,6 +48,8 @@ public class GINDroid extends TabActivity
 	//Set tab height
 	for (int i = 0; i < 3; i++)
 	    tabHost.getTabWidget().getChildAt(i).getLayoutParams().height = 30;
+
+	tabHost.setCurrentTab(1);
     }
 
     /** Create menu from XML
