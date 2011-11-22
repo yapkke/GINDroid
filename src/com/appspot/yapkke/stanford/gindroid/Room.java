@@ -2,8 +2,11 @@ package com.appspot.yapkke.stanford.gindroid;
 
 import android.app.*;
 import android.widget.*;
+import android.content.*;
 import android.R.layout.*;
 import android.os.Bundle;
+
+import android.util.Log;
 
 /** Room activity
  *
@@ -23,6 +26,12 @@ public class Room
 
 	refresh_listing();
 
+	//Get intent
+	String room = getIntent().getStringExtra("Room");
+	if (room != null)
+	    Log.d("Room", room);
+	
+	//Create spinner
 	Spinner spin = (Spinner) findViewById(R.id.room_spinner);
 	ArrayAdapter adapter = new ArrayAdapter<String>(this, 
 							android.R.layout.simple_spinner_item,

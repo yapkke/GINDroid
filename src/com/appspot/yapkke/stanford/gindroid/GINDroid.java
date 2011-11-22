@@ -33,8 +33,18 @@ public class GINDroid extends TabActivity
 	tabHost.addTab(spec);
 
 	intent = new Intent().setClass(this, Room.class);
+
+	String roomExtra = getIntent().getStringExtra("Room");
+	if (roomExtra != null)
+	    intent.putExtra("Room", roomExtra);
 	spec = tabHost.newTabSpec("Now").setIndicator("Room").setContent(intent);
 	tabHost.addTab(spec);
+	if (roomExtra != null)
+	    tabHost.setCurrentTab(1);
+
+        tabHost.getTabWidget().getChildAt(0).getLayoutParams().height = 40;
+        tabHost.getTabWidget().getChildAt(1).getLayoutParams().height = 40;
+
     }
 
     /** Create menu from XML

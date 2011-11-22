@@ -19,6 +19,7 @@ import java.util.*;
  */
 public class Now
     extends GDActivity
+    implements OnItemClickListener
 {    
     public class EventAdapter<T>
 	extends ArrayAdapter<T>
@@ -80,15 +81,15 @@ public class Now
 
 	ListView lv = (ListView) findViewById(R.id.now_listview);
 	lv.setAdapter(new EventAdapter<CurrNextEvent>(this, R.layout.now, currNextEvents()));
-	lv.setOnItemClickListener(new OnItemClickListener() {
-		public void onItemClick(AdapterView<?> parent, View view, int position, long id) 
-		{
-		    // When clicked, show a toast with the TextView text
-		    Toast.makeText(getApplicationContext(),
-				   ((TextView) view.findViewById(R.id.now_classroom)).getText(),
-				   Toast.LENGTH_SHORT).show();
-		}
-	    });
+	lv.setOnItemClickListener(this);
+    }
+
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) 
+    {
+	Intent intent = new Intent(this, GINDroid.class);
+	intent.putExtra("Room",
+			((TextView) view.findViewById(R.id.now_classroom)).getText());
+	startActivity(intent);
     }
 
     class CurrNextEvent
