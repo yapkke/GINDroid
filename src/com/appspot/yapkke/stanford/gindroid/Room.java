@@ -2,6 +2,7 @@ package com.appspot.yapkke.stanford.gindroid;
 
 import android.app.*;
 import android.widget.*;
+import android.widget.AdapterView.*;
 import android.content.*;
 import android.view.*;
 import android.R.layout.*;
@@ -18,6 +19,7 @@ import java.util.*;
  */
 public class Room
     extends GDActivity
+    implements OnItemSelectedListener
 {
     public class EventAdapter<T>
 	extends ArrayAdapter<T>
@@ -70,6 +72,7 @@ public class Room
 							classrooms());
 	adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 	spin.setAdapter(adapter);
+	spin.setOnItemSelectedListener(this);
 
 	//Set pre-set room
 	String room = getIntent().getStringExtra("Room");
@@ -77,13 +80,22 @@ public class Room
 	    for (int i = 0; i < spin.getCount(); i++)
 		if (room.compareTo((String) spin.getItemAtPosition(i)) == 0)
 		    spin.setSelection(i);
+    }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) 
+    {
 	//Set list view
+	Spinner spin = (Spinner) findViewById(R.id.room_spinner);
 	ListView lv = (ListView) findViewById(R.id.room_listview);
 	lv.setAdapter(new EventAdapter<WebGin.Event>(this, R.layout.room,
 						     roomEvents((String) spin.getSelectedItem())));
     }
 
+    @Override
+    public void onNothingSelected(AdapterView<?> parentView) 
+    { }
+    
     public String[] classrooms()
     {
 	String[] cs = new String[listing.classrooms.size()];
