@@ -256,6 +256,8 @@ public class WebGin
 	//Get form for authentication
 	HttpGet request = new HttpGet("https://gin.stanford.edu");
 	String response = httpRequest(request);
+	if (response == null)
+	    return;
 
 	//Parse from form
 	List<NameValuePair> nameValList = new ArrayList<NameValuePair>();
