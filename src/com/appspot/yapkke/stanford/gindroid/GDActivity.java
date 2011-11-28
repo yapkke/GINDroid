@@ -4,15 +4,16 @@ import android.app.*;
 import android.content.*;
 import android.widget.*;
 import android.preference.*;
+import android.os.*;
 
-import android.os.Bundle;
+import android.util.Log;
 
 /** GINDroid's Activity
  * 
  * @author ykk
  * @date Nov 2011
  */
-public class GDActivity
+public abstract class GDActivity
     extends Activity
 {
     /** WebGin instance
@@ -34,12 +35,37 @@ public class GDActivity
 		settings.getString("password", ""));	
     }
 
-    public void refresh_listing()
+    public abstract void refresh_listing();
+
+    protected class UpdateListing 
+	extends AsyncTask<WebGin, Void, Void>
     {
-	listing = wg.briefListing();
-	if (listing.classrooms.size() == 0)
-	    Toast.makeText(this, "GIN access failed!", Toast.LENGTH_LONG).show();
-	else
-	    Toast.makeText(this, "Fetch GIN data", Toast.LENGTH_SHORT).show();
-    }
+	public ProgressDialog dialog;
+	public GDActivity gdActivity = GDActivity.this;
+
+	@Override
+	    protected void onPreExecute()
+	{
+	    dialog = new ProgressDialog(gdActivity);
+	    dialog.setMessage("Fetching data from GIN...");
+	    dialog.show();
+	}
+
+	@Override
+	    protected Void doInBackground(WebGin... wg)
+	{
+	    gdActivity.listing = wg[0].briefListing();   
+	    return null;
+	}
+	
+	@Override
+	    protected void onPostExecute(Void v)
+	{
+	    if (dialog.isShowing())
+		dialog.dismiss();
+	    if (listing.classrooms.size() == 0)
+		Toast.makeText(gdActivity, "GIN access failed!", Toast.LENGTH_LONG).show();
+	    gdActivity.refresh_listing();
+	}
+    };
 }

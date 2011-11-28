@@ -63,8 +63,12 @@ public class Room
         super.onCreate(savedInstanceState);
         setContentView(R.layout.room_main);
 
-	refresh_listing();
-	
+	new UpdateListing().execute(wg);
+    }
+
+    @Override
+	public void refresh_listing()
+    {
 	//Create spinner
 	Spinner spin = (Spinner) findViewById(R.id.room_spinner);
 	ArrayAdapter adapter = new ArrayAdapter<String>(this, 

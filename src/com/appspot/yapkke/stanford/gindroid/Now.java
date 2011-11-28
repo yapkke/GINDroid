@@ -77,8 +77,12 @@ public class Now
         super.onCreate(savedInstanceState);
 	setContentView(R.layout.now_main);
         
-	refresh_listing();
-
+	new UpdateListing().execute(wg);
+    }
+    
+    @Override
+	public void refresh_listing()
+    {
 	ListView lv = (ListView) findViewById(R.id.now_listview);
 	lv.setAdapter(new EventAdapter<CurrNextEvent>(this, R.layout.now, currNextEvents()));
 	lv.setOnItemClickListener(this);

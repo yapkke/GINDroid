@@ -64,8 +64,12 @@ public class All
         super.onCreate(savedInstanceState);
 	setContentView(R.layout.all_main);
         
-	refresh_listing();
-
+	new UpdateListing().execute(wg);
+    }
+    
+    @Override
+	public void refresh_listing()
+    {
 	ListView lv = (ListView) findViewById(R.id.all_listview);
 	lv.setAdapter(new EventAdapter<WebGin.Event>(this, R.layout.all, allEvents()));
     }
