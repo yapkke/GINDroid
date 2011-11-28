@@ -14,6 +14,8 @@ import android.os.Bundle;
  */
 public class GINDroid extends TabActivity
 {    
+    public static final String MASTER_PASS = "GATES";
+
     /** Starting GINDroid activity
      */
     @Override

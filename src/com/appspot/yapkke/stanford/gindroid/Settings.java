@@ -8,6 +8,8 @@ import android.widget.*;
 import android.preference.*;
 import android.os.Bundle;
 
+import net.sf.andhsli.hotspotlogin.*;
+
 /** Settings activity
  *
  * @author ykk
@@ -43,7 +45,14 @@ public class Settings
 	//Populate saved content if any
 	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 	userEditText.setText(settings.getString("username", ""));
-	passwordEditText.setText(settings.getString("password", ""));	
+	try
+	{
+	    passwordEditText.setText(SimpleCrypto.decrypt(GINDroid.MASTER_PASS, 
+							  settings.getString("password", "")));	
+	} catch (Exception e)
+	{
+	    ;
+	}
     }
 
     /** Deal with clicking of the OK button
@@ -56,7 +65,14 @@ public class Settings
 	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 	SharedPreferences.Editor editor = settings.edit();
 	editor.putString("username", userEditText.getText().toString());
-	editor.putString("password", passwordEditText.getText().toString());
+	try
+	{
+	    editor.putString("password", SimpleCrypto.encrypt(GINDroid.MASTER_PASS, 
+							      passwordEditText.getText().toString()));
+	} catch (Exception e)
+	{
+	    ;
+	}
 	editor.commit();
 
 	Toast.makeText(this, "Settings saved", Toast.LENGTH_SHORT).show();

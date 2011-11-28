@@ -8,6 +8,8 @@ import android.os.*;
 
 import android.util.Log;
 
+import net.sf.andhsli.hotspotlogin.*;
+
 /** GINDroid's Activity
  * 
  * @author ykk
@@ -31,8 +33,15 @@ public abstract class GDActivity
 	//Create new WebGin
 	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 	wg = new WebGin();
-	wg.auth(settings.getString("username", ""),
-		settings.getString("password", ""));	
+	try
+	{
+	    wg.auth(settings.getString("username", ""),
+		    SimpleCrypto.decrypt(GINDroid.MASTER_PASS,
+					 settings.getString("password", "")));	
+	} catch (Exception e)
+        {
+	    ;
+	}
     }
 
     public abstract void refresh_listing();
