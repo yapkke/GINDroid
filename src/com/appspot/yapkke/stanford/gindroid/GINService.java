@@ -61,7 +61,7 @@ public class GINService
 	@Override
 	protected void onPostExecute(Void v)
 	{
-	    Toast.makeText(getBaseContext(), "Authenticated into GIN", Toast.LENGTH_SHORT).show();
+	    //Toast.makeText(getBaseContext(), "Authenticated into GIN", Toast.LENGTH_SHORT).show();
 	    Log.d(TAG, "GIN service authenticated");
 	}
     }

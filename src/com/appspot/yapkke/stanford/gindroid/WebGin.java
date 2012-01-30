@@ -345,12 +345,14 @@ public class WebGin
     public void auth(String username, String password)
     {
 	//Get form for authentication
+	Log.d(name, "Get form for authentication");
 	HttpGet request = new HttpGet("https://gin.stanford.edu");
 	String response = httpRequest(request);
 	if (response == null)
 	    return;
 
 	//Parse from form
+	Log.d(name, "Parse form for authentication");
 	List<NameValuePair> nameValList = new ArrayList<NameValuePair>();
 	Document doc = Jsoup.parse(response);
 	Elements forms = doc.body().getElementsByTag("form");
@@ -375,6 +377,7 @@ public class WebGin
 	}
 
 	//Post for WebAuth
+	Log.d(name, "Send form for authentication");
 	HttpPost httpPost = new HttpPost("https://cs.stanford.edu/login");
 	String postResponse;
 	try
