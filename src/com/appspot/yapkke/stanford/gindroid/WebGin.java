@@ -10,6 +10,8 @@ import org.apache.http.message.*;
 import org.apache.http.protocol.*;
 import org.apache.http.*;
 
+import org.json.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -66,6 +68,46 @@ public class WebGin
 	public String owner = "";
 	public String url = "";
 
+	public void fromJSON(JSONObject jobj)
+	{
+	    try
+	    {
+		title = jobj.getString("title");
+		classroom = jobj.getString("classroom");
+		date = jobj.getString("date");
+		start = new Integer(jobj.getInt("start"));
+		end = new Integer(jobj.getInt("end"));
+		series = jobj.getString("series");
+		owner = jobj.getString("owner");
+		url = jobj.getString("url");
+	    } catch (JSONException e)
+	    {
+		Log.e(name, "Event JSON decoding error: "+e.toString());
+	    }
+	}
+
+	public JSONObject toJSON()
+	{
+	    JSONObject jobj = new JSONObject();
+	    try
+	    {
+		jobj.put("title", title);
+		jobj.put("classroom", classroom);
+		jobj.put("date", date);
+		jobj.put("start", start.intValue());
+		jobj.put("end", end.intValue());
+		jobj.put("series", series);
+		jobj.put("owner", owner);
+		jobj.put("url", url);
+	    } catch (JSONException e)
+	    {
+		Log.e(name, "Event JSON encoding error: "+e.toString());
+
+	    }
+
+	    return jobj;
+	}
+
 	public String toString()
 	{
 	    String s = "Title:"+title+"\n";
@@ -98,6 +140,55 @@ public class WebGin
     {
 	Vector<Event> events = new Vector<Event>();
 	Vector<String> classrooms = new Vector<String>();
+
+	public void fromJSON(JSONObject jobj)
+	{
+	    try
+	    {
+		JSONArray jaEvents = jobj.getJSONArray("events");
+		JSONArray jaClassrooms = jobj.getJSONArray("classrooms");
+		
+		events.clear();
+		for (int i = 0; i < jaEvents.length(); i++)
+		{
+		    Event e = new Event();
+		    e.fromJSON(jaEvents.getJSONObject(i));
+		    events.add(e);
+		}
+
+		classrooms.clear();
+		for (int i = 0; i < jaClassrooms.length(); i++)
+		    classrooms.add(jaClassrooms.getString(i));
+
+	    } catch (JSONException e)
+	    {
+		Log.e(name, "Listing JSON decoding error: "+e.toString());
+	    }
+	}
+
+	public JSONObject toJSON()
+	{
+	    JSONObject jobj = new JSONObject();
+	    JSONArray jaEvents = new JSONArray();
+	    JSONArray jaClassrooms = new JSONArray();
+	    try
+	    {
+		for (Event e: events)
+		    jaEvents.put(e.toJSON());
+		for (String c: classrooms)
+		    jaClassrooms.put(c);
+
+		jobj.put("events", jaEvents);
+		jobj.put("classrooms", jaClassrooms);
+	    } catch (JSONException e)
+	    {
+		Log.e(name, "Event JSON encoding error: "+e.toString());
+
+	    }
+
+	    return jobj;
+	}
+
     }
 
     /** Get today's brief listing
