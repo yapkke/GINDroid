@@ -24,32 +24,44 @@ public class GINService
     protected WebGin wg = null;
 
     @Override
-    public void onCreate()
-    {
-	Log.d(TAG, "Creating GIN service...");
-
-	if (wg == null)
-	{
-	    wg = new WebGin();
-	    SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-	    try
-	    {
-		wg.auth(settings.getString("username", ""),
-			SimpleCrypto.decrypt(GINDroid.MASTER_PASS,
-					     settings.getString("password", "")));	
-	    } catch (Exception e)
-	    {
-		;
-	    }
-	}
-    }
-
-    @Override
     public int onStartCommand(Intent intent, int flags, int startId) 
     {
 	Log.d(TAG, "Starting GIN service...");
 
+	if (wg == null)
+	{
+	    wg = new WebGin();
+	    new Authenticate().execute(wg);
+	}
+
 	return START_STICKY;
+    }
+
+    protected class Authenticate
+	extends AsyncTask<WebGin, Void, Void>
+    {
+	@Override
+	protected Void doInBackground(WebGin... wg)
+	{	    
+	    SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+	    try
+	    {
+		wg[0].auth(settings.getString("username", ""),
+			   SimpleCrypto.decrypt(GINDroid.MASTER_PASS,
+						settings.getString("password", "")));	
+	    } catch (Exception e)
+	    {
+		;
+	    }
+	    
+	    return null;
+	}
+
+	@Override
+	protected void onPostExecute(Void v)
+	{
+	    Log.d(TAG, "GIN service authenticated");
+	}
     }
     
     @Override
