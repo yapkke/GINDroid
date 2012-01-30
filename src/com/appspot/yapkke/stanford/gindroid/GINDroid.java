@@ -24,8 +24,12 @@ public class GINDroid extends TabActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
+	//Pre-emptive start of GIN Service
+	Intent intent = new Intent(this, GINService.class);
+	startService(intent);
+
 	//Create tabs
-	Resources res = getResources();
+	/*Resources res = getResources();
 	TabHost tabHost = getTabHost();
 	TabHost.TabSpec spec; 
 	Intent intent; 
@@ -49,7 +53,7 @@ public class GINDroid extends TabActivity
 
 	//Set tab height
 	for (int i = 0; i < 3; i++)
-	    tabHost.getTabWidget().getChildAt(i).getLayoutParams().height = 30;
+	tabHost.getTabWidget().getChildAt(i).getLayoutParams().height = 30;*/
     }
 
     /** Create menu from XML
