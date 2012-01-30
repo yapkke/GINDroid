@@ -3,6 +3,7 @@ package com.appspot.yapkke.stanford.gindroid;
 import android.app.*;
 import android.content.*;
 import android.preference.*;
+import android.widget.*;
 import android.os.*;
 
 import android.util.Log;
@@ -60,6 +61,7 @@ public class GINService
 	@Override
 	protected void onPostExecute(Void v)
 	{
+	    Toast.makeText(getBaseContext(), "Authenticated into GIN", Toast.LENGTH_SHORT).show();
 	    Log.d(TAG, "GIN service authenticated");
 	}
     }
