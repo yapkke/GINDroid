@@ -6,6 +6,8 @@ import android.preference.*;
 import android.widget.*;
 import android.os.*;
 
+import java.util.concurrent.*;
+
 import android.util.Log;
 
 import net.sf.andhsli.hotspotlogin.*;
@@ -32,12 +34,53 @@ public class GINService
 	if (wg == null)
 	{
 	    wg = new WebGin();
-	    new Authenticate().execute(wg);
+	    Authenticate auth = new Authenticate();
+	    auth.execute(wg);	    
+	    new AuthCheck().execute(auth);
 	}
 
 	return START_STICKY;
     }
 
+    protected class AuthCheck
+	extends AsyncTask<Authenticate, Void, Void>
+    {
+	protected final String STATUS_SUCCESS = "Authenticated into GIN";
+	protected String status = "";
+
+	@Override
+	protected Void doInBackground(Authenticate... auth)
+	{    
+	    try
+	    {
+		if (auth[0].getStatus() == AsyncTask.Status.RUNNING)
+		    auth[0].get(20, TimeUnit.SECONDS);
+	    } catch(TimeoutException e)
+	    {
+		auth[0].cancel(true);
+		status = "GIN Authentication timed out!";
+		return null;
+	    } catch (Exception e)
+	    {
+		status = "GIN Authentication failed!";
+		return null;
+	    }
+	    status = STATUS_SUCCESS;
+	    
+	    return null;
+	}	
+
+	@Override
+	protected void onPostExecute(Void v)
+	{
+	    Log.d(TAG, status);
+	    Toast.makeText(getBaseContext(), status, 
+			   (status == STATUS_SUCCESS)? Toast.LENGTH_SHORT:Toast.LENGTH_LONG).show();
+	}
+    }
+
+    /** Authentication task
+     */
     protected class Authenticate
 	extends AsyncTask<WebGin, Void, Void>
     {
@@ -61,7 +104,6 @@ public class GINService
 	@Override
 	protected void onPostExecute(Void v)
 	{
-	    //Toast.makeText(getBaseContext(), "Authenticated into GIN", Toast.LENGTH_SHORT).show();
 	    Log.d(TAG, "GIN service authenticated");
 	}
     }
